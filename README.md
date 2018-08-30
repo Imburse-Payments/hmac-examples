@@ -27,7 +27,7 @@ The below table outlines the things you will need to be able to calculate an HMA
 | ------ | ------ | ------ | ------ |
 | Public Key | `pubKey` | The public key generated in the Imburse Portal | `example-public-key`
 | Private Key | `priKey` | The private key generated in the Imburse Portal | `example-private-key`
-| Random Nonce | `nonce` | Any random alpha-numeric string. Prevents replay attacks. `Note that Imburse will block duplice requests that has had a nonce come through already` | `randomuniquestring123`
+| Random Nonce | `nonce` | Any random alpha-numeric string. Prevents replay attacks. `Note that Imburse will block duplicate requests that has had a nonce come through already` | `randomuniquestring123`
 | Epoch time-stamp | `epoch` | Seconds since epoch. See [Calculating Epoch](#calculating-epoch)  | `1535617532`
 | Body Content | `body` | For Post and Put requests only. This is the http body that is being sent  | 
 
@@ -88,7 +88,7 @@ REQUEST WITHOUT A BODY i.e. GET REQUEST:
 Add the following authorised header to your http api request.
 
 ```sh
-  let token = {`pubKey`}:{`nonce`}:{`epoch`}:{`signedSignature`}
+  let token = $"{pubKey}:{nonce}:{epoch}:{signedSignature}
 ```
 The final request header will look as follows:
 
