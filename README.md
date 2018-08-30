@@ -25,12 +25,13 @@ The below table outlines the things you will need to be able to calculate an HMA
 
 | Thing | Alias | Description | Example |
 | ------ | ------ | ------ | ------ |
-| Public Key | PubKey | The public key generated in the Imburse Portal | `example-public-key`
-| Public Key | PriKey | The public key generated in the Imburse Portal | `example-private-key`
-| Random Nonce | Nonce | Any random alpha-numeric string. Prevents replay attacks. `Note that Imburse will block duplice requests with thats had a nonce come through already` | `example-private-key`
-| Epoch time-stamp | epoch | Seconds since epoch. See [Calculating Epoch](#calculating-epoch)  | `example-private-key`
+| Public Key | `pubKey` | The public key generated in the Imburse Portal | `example-public-key`
+| Public Key | `priKey` | The public key generated in the Imburse Portal | `example-private-key`
+| Random Nonce | `nonce` | Any random alpha-numeric string. Prevents replay attacks. `Note that Imburse will block duplice requests with thats had a nonce come through already` | `example-private-key`
+| Epoch time-stamp | `epoch` | Seconds since epoch. See [Calculating Epoch](#calculating-epoch)  | `example-private-key`
+| Body Content | `body` | For Post and Put requests only. This is the http body that is being sent  | 
 
-###### Calculating Epoch
+#### Calculating Epoch
 
 Below shows how to get the total seconds since epoch. Its important to **note** that Imburse works to a UTC time stamp. If you accidently have local time, the authentication will not pass as we dont accept requests that are older than 5 minutes.
 
@@ -38,3 +39,51 @@ Below shows how to get the total seconds since epoch. Its important to **note** 
 (Date.UtcNow - DateTime(1970, 01, 01, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds
 ```
 
+#### Creating the signature
+
+The following formula is used for creating the HMAC:
+
+1. Hash the `body` using an `SHA256` hash algorythm and the convert it to a base64 string. Note this is for only requests that contain a body. 
+```sh
+  let hashedBody = SHA256(body).toBase64String()
+```
+**ATTENTION!** Most Hash algorythms will take a binary array. When converting the body (most likely JSON) be sure to make it `UTF8` encoding. For example:
+
+```sh
+  UTF8Encoder.GetBytes(body)
+```
+
+2. Create the string that will be generated into an HMAC signature. Below is the formula to generate the string:
+
+```sh
+let stringToBeSigned = $"{pubKey}:{nonce}:{epoch}:{hashedBody}"
+
+Result:
+
+REQUEST WITH A BODY:
+"some-public-key:randomgenerateduniquenonce:1535617532:GgVc9wTFOfF7EcDHiz+U/kpf3H7A5FfZ+RfA6FZ3IFA="
+
+REQUEST WITHOUT A BODY i.e. GET REQUEST:
+
+"some-public-key:randomgenerateduniquenonce:1535617532:"
+```
+
+
+
+3. Similar to step 2, to generate the HMAC signature sign it using the private key and then base64 encode it
+
+
+```sh
+  let signedSignature = HMACSHA256(stringToBeSigned).toBase64String()
+
+  print(signedSignature)
+  ......................
+
+  "asd3ad3a3dascwTFOfF7EcDHiz+U/kpf3H7A5FfZ+RfA6FZ3IFA="
+```
+
+4.  Generate th HTTP Hmac auth header.
+
+Add the following authorised header to your request
+
+hmac {`pubKey`}:{`nonce`}:{`epoch`}:{`signedSignature`}
