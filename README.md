@@ -58,7 +58,8 @@ The following formula is used for creating the HMAC:
 ```sh
 let stringToBeSigned = $"{pubKey}:{nonce}:{epoch}:{hashedBody}"
 
-Result:
+Result
+---------------
 
 REQUEST WITH A BODY:
 "some-public-key:randomgenerateduniquenonce:1535617532:GgVc9wTFOfF7EcDHiz+U/kpf3H7A5FfZ+RfA6FZ3IFA="
@@ -76,8 +77,8 @@ REQUEST WITHOUT A BODY i.e. GET REQUEST:
 ```sh
   let signedSignature = HMACSHA256(stringToBeSigned).toBase64String()
 
-  print(signedSignature)
-  ......................
+  Result
+  ---------------
 
   "asd3ad3a3dascwTFOfF7EcDHiz+U/kpf3H7A5FfZ+RfA6FZ3IFA="
 ```
