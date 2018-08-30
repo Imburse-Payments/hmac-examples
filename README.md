@@ -85,8 +85,13 @@ REQUEST WITHOUT A BODY i.e. GET REQUEST:
 
 4.  Generate th HTTP Hmac auth header.
 
-Add the following authorised header to your http api request
+Add the following authorised header to your http api request.
 
-hmac {`pubKey`}:{`nonce`}:{`epoch`}:{`signedSignature`}
+```sh
+  let token = {`pubKey`}:{`nonce`}:{`epoch`}:{`signedSignature`}
+```
+The final request header will look as follows:
+
+`Authorization: Hmac {token}`
 
 All done!
