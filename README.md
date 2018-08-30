@@ -26,7 +26,7 @@ The below table outlines the things you will need to be able to calculate an HMA
 | Thing | Alias | Description | Example |
 | ------ | ------ | ------ | ------ |
 | Public Key | `pubKey` | The public key generated in the Imburse Portal | `example-public-key`
-| Private Key | `priKey` | The public key generated in the Imburse Portal | `example-private-key`
+| Private Key | `priKey` | The private key generated in the Imburse Portal | `example-private-key`
 | Random Nonce | `nonce` | Any random alpha-numeric string. Prevents replay attacks. `Note that Imburse will block duplice requests with thats had a nonce come through already` | `example-private-key`
 | Epoch time-stamp | `epoch` | Seconds since epoch. See [Calculating Epoch](#calculating-epoch)  | `example-private-key`
 | Body Content | `body` | For Post and Put requests only. This is the http body that is being sent  | 
