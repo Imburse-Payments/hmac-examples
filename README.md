@@ -83,7 +83,7 @@ REQUEST WITHOUT A BODY i.e. GET REQUEST:
   "asd3ad3a3dascwTFOfF7EcDHiz+U/kpf3H7A5FfZ+RfA6FZ3IFA="
 ```
 
-4.  Generate th HTTP Hmac auth header.
+4.  Generate the HTTP Hmac auth header.
 
 Add the following authorised header to your http api request.
 
