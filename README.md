@@ -17,21 +17,21 @@ Once the server receives the request and regenerates its own unique HMAC, it com
 
 `Note: Imburse uses an HMACSHA256 algorythm.`
 
-### Calculating the HMAC
+# Calculating the HMAC
 
-##### Things you will need
+## Things you will need
 
 The below table outlines the things you will need to be able to calculate an HMAC Signature
 
 | Thing | Alias | Description | Example |
 | ------ | ------ | ------ | ------ |
 | Public Key | `pubKey` | The public key generated in the Imburse Portal | `example-public-key`
-| Public Key | `priKey` | The public key generated in the Imburse Portal | `example-private-key`
+| Private Key | `priKey` | The public key generated in the Imburse Portal | `example-private-key`
 | Random Nonce | `nonce` | Any random alpha-numeric string. Prevents replay attacks. `Note that Imburse will block duplice requests with thats had a nonce come through already` | `example-private-key`
 | Epoch time-stamp | `epoch` | Seconds since epoch. See [Calculating Epoch](#calculating-epoch)  | `example-private-key`
 | Body Content | `body` | For Post and Put requests only. This is the http body that is being sent  | 
 
-#### Calculating Epoch
+## Calculating Epoch
 
 Below shows how to get the total seconds since epoch. Its important to **note** that Imburse works to a UTC time stamp. If you accidently have local time, the authentication will not pass as we dont accept requests that are older than 5 minutes.
 
@@ -39,7 +39,7 @@ Below shows how to get the total seconds since epoch. Its important to **note** 
 (Date.UtcNow - DateTime(1970, 01, 01, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds
 ```
 
-#### Creating the signature
+## Creating the signature
 
 The following formula is used for creating the HMAC:
 
@@ -75,7 +75,7 @@ REQUEST WITHOUT A BODY i.e. GET REQUEST:
 
 
 ```sh
-  let signedSignature = HMACSHA256(stringToBeSigned).toBase64String()
+  let signedSignature = HMACSHA256(privateKey,stringToBeSigned).toBase64String()
 
   Result
   ---------------
