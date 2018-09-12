@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Hmac Generator</title>
+
+    <style>
+    body { 
+      font-family: Ariel, Helvetica, sans-serif;
+      font-size: 11pt;
+      width: 600px;
+      margin: 40px auto;
+    }
+    label {
+      display: block;
+      clear: both;
+      padding: 0 0 12px;
+      line-height: 22px;
+    }
+    label input,
+    label textarea {
+      font-family: courier;
+      width: 80%;
+      float: right;
+      box-sizing: border-box;
+      padding: 3px;
+    }
+    p {
+      clear:both;
+    }
+    </style>
+  </head>
+
+  <body>
+    <h1>Hmac Generator</h1>
+    
+    <form onsubmit="return generate()">
+      <label>Public Key <input type="text" id="PublicKey" /></label>
+      <label>Private Key <input type="text" id="PrivateKey" /></label>
+      <label>Nonce <input type="text" id="Nonce" disabled /></label>
+      <label>Body <textarea id="Body"></textarea></label>
+      <p>
+        <input type="submit" value="Generate HMAC" />
+      </p>
+    </form>
+    
+    <div style="word-wrap: break-word; font-family: courier"></div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/hmac-sha256.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/enc-base64.min.js"></script>
+
+    <script>
+    
+    setInterval(function () {
+      var nonce = "";
+      var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+      for (var i = 0; i < 30; i++)
+        nonce += possible.charAt(Math.floor(Math.random() * possible.length));
+      
+      document.getElementById("Nonce").value = nonce;
+    }, 1000);
+    
+    function generate(){
+      
+      var publicKey = document.getElementById("PublicKey").value;
+      var privateKey = document.getElementById("PrivateKey").value;
+      var nonce = document.getElementById("Nonce").value;
+      var body = document.getElementById("Body").value;
+      
+      printHmac(publicKey, privateKey, nonce, body);
+      
+      return false;
+    }
+    
+    function printHmac(publicKey, privateKey, nonce, body){
+      
+      var privateKeyBytes = CryptoJS.enc.Base64.parse(privateKey);
+      
+      if (body.length > 0){
+        var utf8Body = CryptoJS.enc.Utf8.parse(body);
+        var hashedBody = CryptoJS.SHA256(utf8Body);
+        var bodySignature = CryptoJS.enc.Base64.stringify(hashedBody);
+      }
+      else {
+        var bodySignature = "";
+      }
+      
+      var timestamp = (new Date).getTime() / 1000;
+      var unsignedSignature = publicKey + ":" + nonce + ":" + timestamp + ":" + bodySignature;
+      
+      var utf8Signature = CryptoJS.enc.Utf8.parse(unsignedSignature);
+      var hashedSignature = CryptoJS.HmacSHA256(utf8Signature, privateKeyBytes);
+      var signedSignature = CryptoJS.enc.Base64.stringify(hashedSignature);
+      
+      var hmac = publicKey + ":" + nonce + ":" + timestamp + ":" + signedSignature;
+      
+      document.getElementsByTagName("div")[0].innerHTML = hmac;
+    }
+    
+    </script>
+
+  </body>
+
+</html>
