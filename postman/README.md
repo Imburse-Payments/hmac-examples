@@ -74,7 +74,7 @@ Firstly make sure you have selected your newly created environment. This will al
 Second, add the required API headers. Both `Authorization` and `Content-Type` headers shown below are required.
 
 Key | Value
-- | -
+--- | -----
 `Authorization` | `Hmac {{token}}`
 `Content-Type` | `application/json`
 
