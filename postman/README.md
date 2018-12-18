@@ -8,7 +8,7 @@ The following guide will show you how to set up an automated pre-request script 
 
  - Copy the `pre-request.js` contents into a pre-request script block at any level (collection, folder, request)
  - Set environment variables `publicKey` and `privateKey` as generated in the Imburse client portal
- - Include the HMAC header `Authorize: hmac {{token}} ` in your request headers.
+ - Include the HMAC header `Authorization: Hmac {{token}} ` in your request headers.
  - Done. The `{{token}}` variable will be replaced with the signed request body on each request.
 
 ## Setup 
