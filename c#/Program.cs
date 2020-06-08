@@ -10,8 +10,8 @@ namespace HmacGenerator
     {
         static void Main(string[] args)
         {
-            var publicKey = "bfaa9a45-5c5a-4bbc-b353-eb6989486c87";
-            var privateKey = "x7uNykwHN3F4ATXMqVcWcCqrc2PnNId7mZ0Ei6IfIMY=";
+            var publicKey = "##PUBLIC_KEY##";
+            var privateKey = "##PRIVATE_KEY##";
 
             var httpRequestBodyContent = "";
             var nonce = CreateNonce();
@@ -33,10 +33,6 @@ namespace HmacGenerator
 
         public static string CreateToken(string secret, string message)
         {
-            //must be UTF8 (incase there are special characters - same byte size but different encoding page
-            //var encoding = new System.Text.ASCIIEncoding(); //
-
-
             byte[] keyByte = Convert.FromBase64String(secret);
             byte[] messageBytes = System.Text.Encoding.UTF8.GetBytes(message);
             using (var hmacsha256 = new HMACSHA256(keyByte))
@@ -53,7 +49,6 @@ namespace HmacGenerator
 
         private static string SignBody(string body)
         {
-
             if (body == string.Empty)
                 return body;
 
